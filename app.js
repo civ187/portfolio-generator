@@ -1,4 +1,6 @@
+const fs = require('fs');
 const inquirer = require('inquirer');
+const generatePage = require('./src/page-template.js');
 // console.log(inquirer);
 const promptUser = () => {
     return inquirer.prompt([
@@ -36,7 +38,7 @@ const promptUser = () => {
         },
         {
             type: 'input',
-            name: 'About',
+            name: 'about',
             message: 'Provide some information about yourself?',
             when: ({ confirmAbout }) => confirmAbout
         }
@@ -127,19 +129,25 @@ const promptProject = portfolioData => {
     });
   };
 
+  promptUser()
+  .then(promptProject)
+  .then(portfolioData => {
+    const pageHTML = generatePage(portfolioData);
 
+    fs.writeFile('./index.html', pageHTML, err => {
+      if (err) throw new Error(err);
 
-
-promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-        console.log(portfolioData);
+      console.log('Page created! Check out index.html in this directory to see it!');
     });
+  });
 
 
-// const fs = require('fs');
 
-// const generatePage = require('./src/page-template.js');
+
+
+
+
+
 
 // const profileDataArgs = process.argv.slice(2);
 
