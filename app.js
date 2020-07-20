@@ -1,14 +1,93 @@
 const inquirer = require('inquirer');
 // console.log(inquirer);
-inquirer
-    .prompt([
+const promptUser = () => {
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'name',
             message: 'What is your name?'
+        },
+        {
+            type: 'input',
+            name: 'github',
+            message: 'Enter your Github Username?'
+        },
+        {
+            type: 'input',
+            name: 'About',
+            message: 'Provide some information about yourself?'
+        }
+    ]);
+};
+
+const promptProject = portfolioData => {
+    
+    //if there's no projects array property, create one
+    if (!portfolioData.projects) {
+        portfolioData.projects = [];
     }
-])
-.then(answers => console.log(answers));
+
+    console.log(`
+  =================
+  Add a New Project
+  =================
+  `);
+    return inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of your project?'
+      },
+      {
+        type: 'input',
+        name: 'description',
+        message: 'Provide a description of the project (Required)'
+      },
+      {
+        type: 'checkbox',
+        name: 'languages',
+        message: 'What did you this project with? (Check all that apply)',
+        choices: ['JavaScript', 'HTML', 'CSS', 'ES6', 'jQuery', 'Bootstrap', 'Node']
+      },
+      {
+        type: 'input',
+        name: 'link',
+        message: 'Enter the GitHub link to your project. (Required)'
+      },
+      {
+        type: 'confirm',
+        name: 'feature',
+        message: 'Would you like to feature this project?',
+        default: false
+      },
+      {
+        type: 'confirm',
+        name: 'confirmAddProject',
+        message: 'Would you like to enter another project?',
+        default: false
+      }
+    ])
+    .then(projectData => {
+        portfolioData.projects.push(projectData);
+        // a condition that will call the promptProject(portfolioData) function when confirmAddProject evaluates to true
+        if (projectData.confirmAddProject) { //checks user response to add more projects or not
+            return promptProject(portfolioData);
+        // if the user declines to add more projects a false is returns and returns the else statement.
+        } else {
+            return portfolioData;
+        }
+    });
+  };
+
+
+
+
+promptUser()
+    .then(promptProject)
+    .then(portfolioData => {
+        console.log(portfolioData);
+    });
+
 
 // const fs = require('fs');
 
