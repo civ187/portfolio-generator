@@ -55,14 +55,9 @@ const generateProjects = projectsArr => {
 };
 
 module.exports = templateData => {
-    // console.log(templateData);
+
     //destructure projects and about data from templateData based on their property key names
     const { projects, about, ...header } = templateData;
-    // console.log("projects", projects);
-    // console.log("about", about);
-    // console.log("header", header);
-
-
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -99,4 +94,3 @@ module.exports = templateData => {
     </html>
     `;
   };
-// module.exports = generatePage;
